@@ -90,34 +90,22 @@
       video { width: 100%; height: 100%; object-fit: cover; }
       
       /* OVERLAYS IA / ESTABILIDAD */
-      .face-guide-container, .doc-guide-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; z-index: 10; padding: 20px; }
+      .face-guide-container, .doc-guide-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; z-index: 10; padding: 0px; }
       
-      .face-oval { width: 70%; height: 75%; border: 4px solid rgba(255, 255, 255, 0.95); border-radius: 50%; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6); transition: border-color 0.3s; }
+      /* AJUSTE: Óvalo Selfie más ancho y movido hacia abajo */
+      .face-oval { width: 75%; height: 70%; border: 4px solid rgba(255, 255, 255, 0.95); border-radius: 50%; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6); margin-top: 50px; transition: border-color 0.3s; }
       
-      .doc-rect-horizontal { width: 90%; height: 60%; border: 4px dashed rgba(255, 255, 255, 0.95); border-radius: 10px; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6); transition: border-color 0.3s; }
-      .doc-rect-vertical { width: 60%; height: 90%; border: 4px dashed rgba(255, 255, 255, 0.95); border-radius: 10px; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6); transition: border-color 0.3s; }
+      /* AJUSTE: Rectángulo INE horizontal más alto (cabe mejor) y movido abajo */
+      .doc-rect-horizontal { width: 95%; height: 75%; border: 4px dashed rgba(255, 255, 255, 0.95); border-radius: 10px; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6); margin-top: 50px; transition: border-color 0.3s; }
+      
+      /* AJUSTE: Rectángulo Comprobante vertical más ancho (menos delgado) y movido abajo */
+      .doc-rect-vertical { width: 80%; height: 80%; border: 4px dashed rgba(255, 255, 255, 0.95); border-radius: 10px; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6); margin-top: 50px; transition: border-color 0.3s; }
       
       /* CLASE VERDE DE ÉXITO */
       .guide-green { border-color: #439859 !important; border-style: solid !important; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.7), 0 0 15px rgba(67, 152, 89, 0.8) inset !important; }
 
-      /* CORRECCIÓN: INSTRUCCIÓN MOVIDA HACIA ARRIBA */
-      .face-instruction { 
-        position: absolute; 
-        top: 15px; 
-        left: 50%; 
-        transform: translateX(-50%); 
-        background: rgba(30, 58, 138, 0.95); 
-        color: #fff; 
-        padding: 8px 16px; 
-        border-radius: 8px; 
-        font-weight: 600; 
-        font-size: 0.85rem; 
-        text-align: center; 
-        width: max-content; 
-        max-width: 90%; 
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
-        z-index: 20; 
-      }
+      /* AJUSTE: Instrucciones arriba (estilo app banco) y siempre visibles */
+      .face-instruction { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: rgba(30, 58, 138, 0.95); color: #fff; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 0.8rem; text-align: center; width: auto; max-width: 95%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 99; white-space: nowrap;}
       
       .stage-controls { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
       .signature-footer { text-align: center; margin-top: 10px; font-weight: 600; color: #000; }
@@ -845,7 +833,6 @@
         cerrarCamaraGlobal();
         document.getElementById(stageId).classList.add('active');
         
-        // CORRECCIÓN: Hacemos un scroll suave para que el usuario vea la cámara abierta
         setTimeout(() => {
             document.getElementById(stageId).scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 150);
@@ -986,7 +973,6 @@
       document.getElementById('fileFirmaFinalFallback').addEventListener('change', (e) => manejarArchivo(e, 'firmaFinalBase64', 'previewFirmaFinal', 'exampleFirmaFinal', 'slotFirmaFinal', 'btnOpenCamFirmaFinal'));
 
       function abrirCamaraDocs(tipo) {
-        // CORRECCIÓN: Movemos la estructura de la cámara justo debajo del botón presionado
         let slotId = (tipo==='frontal') ? 'slotIneFrontal' : (tipo==='trasera') ? 'slotIneTrasera' : 'slotComprobante';
         document.getElementById(slotId).insertAdjacentElement('afterend', document.getElementById('cameraStageDocs'));
 
@@ -996,13 +982,12 @@
         const rectGuide = document.getElementById('docGuideRect');
         const videoWrapper = document.querySelector('#cameraStageDocs .video-wrapper');
 
-        // CORRECCIÓN: Cambiamos aspecto del video y el rectángulo
         if(tipo==='comprobante') {
             rectGuide.className = 'doc-rect-vertical';
-            videoWrapper.style.aspectRatio = '3/4'; // Video en modo vertical
+            videoWrapper.style.aspectRatio = '3/4'; 
         } else {
             rectGuide.className = 'doc-rect-horizontal';
-            videoWrapper.style.aspectRatio = '16/9'; // Video en modo horizontal
+            videoWrapper.style.aspectRatio = '16/9'; 
         }
         
         let fallback = (tipo==='frontal') ? 'fileIneFrontalFallback' : (tipo==='trasera') ? 'fileIneTraseraFallback' : 'fileComprobanteFallback';
@@ -1027,7 +1012,6 @@
         cambiarVista('vista-datos-contacto');
       }
 
-      // Lógica de Formulario de Ubicaciones
       const selPais = document.getElementById('pais'); const selEst = document.getElementById('estado'); const selCiu = document.getElementById('ciudad'); const inCol = document.getElementById('colonia');
       const datalistCol = document.getElementById('coloniasCuliacan');
       coloniasCuliacan.forEach(c => datalistCol.innerHTML += `<option value="${c}">`);
@@ -1061,7 +1045,6 @@
         inCol.value = ''; inCol.disabled = !selCiu.value;
       });
 
-      // Lógica Otros Radios
       document.querySelectorAll('input[name="tipoCasa"]').forEach(r => r.addEventListener('change', () => {
         const divOtra = document.getElementById('otraCasaTexto');
         if(document.getElementById('radioOtraCasa').checked) divOtra.classList.remove('hidden'); else { divOtra.classList.add('hidden'); divOtra.value = ''; }
@@ -1156,7 +1139,6 @@
         cambiarVista('vista-privacidad-final');
       }
 
-      // ================= ENVÍO FINAL A APPS SCRIPT =================
       async function enviarActualizacionFinal() {
         if(!solicitudData.firmaFinalBase64) {
           Swal.fire({ icon: 'warning', title: 'Firma pendiente', text: 'Toma la foto de tu firma final (selfie).', confirmButtonColor: '#439859' }); return;
