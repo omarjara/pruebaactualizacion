@@ -92,20 +92,20 @@
       /* OVERLAYS IA / ESTABILIDAD */
       .face-guide-container, .doc-guide-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; z-index: 10; padding: 0px; }
       
-      /* AJUSTE: Óvalo Selfie más ancho y movido hacia abajo */
-      .face-oval { width: 75%; height: 70%; border: 4px solid rgba(255, 255, 255, 0.95); border-radius: 50%; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6); margin-top: 50px; transition: border-color 0.3s; }
+      /* AJUSTE: Óvalo Selfie con proporción natural de rostro y más abajo */
+      .face-oval { width: 65%; max-width: 280px; aspect-ratio: 3/4; border: 4px solid rgba(255, 255, 255, 0.95); border-radius: 50%; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6); margin-top: 65px; transition: border-color 0.3s; }
       
-      /* AJUSTE: Rectángulo INE horizontal más alto (cabe mejor) y movido abajo */
-      .doc-rect-horizontal { width: 95%; height: 75%; border: 4px dashed rgba(255, 255, 255, 0.95); border-radius: 10px; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6); margin-top: 50px; transition: border-color 0.3s; }
+      /* AJUSTE: INE horizontal con proporción exacta de credencial (85x54mm) para evitar aplastamiento */
+      .doc-rect-horizontal { width: 85%; max-width: 380px; aspect-ratio: 85/54; border: 4px dashed rgba(255, 255, 255, 0.95); border-radius: 10px; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6); margin-top: 45px; transition: border-color 0.3s; }
       
-      /* AJUSTE: Rectángulo Comprobante vertical más ancho (menos delgado) y movido abajo */
-      .doc-rect-vertical { width: 80%; height: 80%; border: 4px dashed rgba(255, 255, 255, 0.95); border-radius: 10px; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6); margin-top: 50px; transition: border-color 0.3s; }
+      /* AJUSTE: Comprobante vertical con proporción de hoja carta */
+      .doc-rect-vertical { width: 75%; max-width: 320px; aspect-ratio: 8.5/11; border: 4px dashed rgba(255, 255, 255, 0.95); border-radius: 10px; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6); margin-top: 45px; transition: border-color 0.3s; }
       
       /* CLASE VERDE DE ÉXITO */
       .guide-green { border-color: #439859 !important; border-style: solid !important; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.7), 0 0 15px rgba(67, 152, 89, 0.8) inset !important; }
 
-      /* AJUSTE: Instrucciones arriba (estilo app banco) y siempre visibles */
-      .face-instruction { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: rgba(30, 58, 138, 0.95); color: #fff; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 0.8rem; text-align: center; width: auto; max-width: 95%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 99; white-space: nowrap;}
+      /* AJUSTE: Instrucciones arriba, permite salto de línea si la pantalla es muy delgada */
+      .face-instruction { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); background: rgba(30, 58, 138, 0.95); color: #fff; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 0.8rem; text-align: center; width: auto; max-width: 95%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 99; white-space: pre-wrap; }
       
       .stage-controls { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
       .signature-footer { text-align: center; margin-top: 10px; font-weight: 600; color: #000; }
@@ -982,12 +982,13 @@
         const rectGuide = document.getElementById('docGuideRect');
         const videoWrapper = document.querySelector('#cameraStageDocs .video-wrapper');
 
+        // AJUSTE: El video horizontal de la INE ahora usa proporción 4/3 para darte más espacio hacia arriba y abajo
         if(tipo==='comprobante') {
             rectGuide.className = 'doc-rect-vertical';
             videoWrapper.style.aspectRatio = '3/4'; 
         } else {
             rectGuide.className = 'doc-rect-horizontal';
-            videoWrapper.style.aspectRatio = '16/9'; 
+            videoWrapper.style.aspectRatio = '4/3'; 
         }
         
         let fallback = (tipo==='frontal') ? 'fileIneFrontalFallback' : (tipo==='trasera') ? 'fileIneTraseraFallback' : 'fileComprobanteFallback';
